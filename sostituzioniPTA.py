@@ -5,7 +5,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from ast import match_case
 import pandas as pd
 import numpy as np
-creds_dict = st.secrets["gcp_service_account"]
+#creds_dict = st.secrets["gcp_service_account"]
 classiSede=["2C-AFM","2B-AFM","2D-AFM","4L-RIM","4L-AFM", "3G-SIA","3F-SIA", "5F-RIM","5F-SIA","4L-AFM, 4L-RIM","4F-SIA","5F-RIM, 5F-SIA","1C-AFM","1B-AFM","3L-RIM"]
 offset=[0,0,0,0,0,0]
 initOre=[4,17,30,43,56,0]
@@ -14,25 +14,33 @@ doce=3
 supp=4
 docentiAssenti=[]
 listaCelledaAggiornare=[]
-
-# orario=pd.read_csv("Orario.csv")
 scope = ['https://spreadsheets.google.com/feeds',
              'https://www.googleapis.com/auth/drive']
-#scope = ['https://spreadsheets.google.com/feeds']
-creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-#creds = ServiceAccountCredentials.from_json_keyfile_name('progettoorariopython-1dcdbcf2aabc.json', scope)
+  #creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name('progettoorariopython-1dcdbcf2aabc.json', scope)
 client = gspread.authorize(creds)
-giorno="Lun"
-sheet = client.open_by_key('1WtRNOWubgWlJhnyc2YzYGb9IJpe-Zne7w8vWC6E7Al0')
-sheet1= client.open_by_key('1Btwyv-MKjBhODUHwdlCtS8faF5uR7Sl2Che2PVUZaCQ')
-sh=sheet.get_worksheet(0)
-sh1=sheet1.get_worksheet(0)
-data = sh1.get_all_records()
-orario=pd.DataFrame(data)
-orario.replace("",np.nan,inplace=True)
+
+
 opzioniAgg=["N","S"]
-opzioniGio=["Lun","Mar","Mer","Gio","Ven","Sab"]
 agg=st.pills("Aggiornamento?",opzioniAgg,default="S" )
+
+
+@st.cache_data(ttl=600)
+def carica_dati():
+
+  sheet1= client.open_by_key('1Btwyv-MKjBhODUHwdlCtS8faF5uR7Sl2Che2PVUZaCQ')
+  sh1=sheet1.get_worksheet(0)
+  data = sh1.get_all_records()
+  return pd.DataFrame(data)
+
+sheet = client.open_by_key('1WtRNOWubgWlJhnyc2YzYGb9IJpe-Zne7w8vWC6E7Al0')
+sh=sheet.get_worksheet(1)
+orario=carica_dati()
+orario.replace("",np.nan,inplace=True)
+giorno="Lun"
+
+opzioniGio=["Lun","Mar","Mer","Gio","Ven","Sab"]
+
 giorno=st.pills("Giorno?", opzioniGio)
 
 if ((agg=='s')or(agg=='S')):
