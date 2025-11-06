@@ -5,7 +5,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from ast import match_case
 import pandas as pd
 import numpy as np
-#creds_dict = st.secrets["gcp_service_account"]
+creds_dict = st.secrets["gcp_service_account"]
 classiSede=["2C-AFM","2B-AFM","2D-AFM","4L-RIM","4L-AFM", "3G-SIA","3F-SIA", "5F-RIM","5F-SIA","4L-AFM, 4L-RIM","4F-SIA","5F-RIM, 5F-SIA","1C-AFM","1B-AFM","3L-RIM"]
 offset=[0,0,0,0,0,0]
 initOre=[4,17,30,43,56,0]
@@ -16,8 +16,8 @@ docentiAssenti=[]
 listaCelledaAggiornare=[]
 scope = ['https://spreadsheets.google.com/feeds',
              'https://www.googleapis.com/auth/drive']
-  #creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-creds = ServiceAccountCredentials.from_json_keyfile_name('progettoorariopython-1dcdbcf2aabc.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+#creds = ServiceAccountCredentials.from_json_keyfile_name('progettoorariopython-1dcdbcf2aabc.json', scope)
 client = gspread.authorize(creds)
 
 
