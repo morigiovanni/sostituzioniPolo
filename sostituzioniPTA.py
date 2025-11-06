@@ -34,7 +34,7 @@ def carica_dati():
   return pd.DataFrame(data)
 
 sheet = client.open_by_key('1WtRNOWubgWlJhnyc2YzYGb9IJpe-Zne7w8vWC6E7Al0')
-sh=sheet.get_worksheet(1)
+sh=sheet.get_worksheet(0)
 orario=carica_dati()
 orario.replace("",np.nan,inplace=True)
 giorno="Lun"
